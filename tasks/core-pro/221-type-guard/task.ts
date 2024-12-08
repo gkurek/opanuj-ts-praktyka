@@ -1,35 +1,37 @@
-/* Mamy system obsługujący różne typy powiadomień. Każde powiadomienie ma wspólne
-pole 'type', ale różne pozostałe pola.
-
-Obecna implementacja używa prostego type guard, który nie wykorzystuje pełni możliwości TypeScriptu.
-
-Twoim zadaniem jest:
-  1. Dodaj nowy typ powiadomienia: 'SystemNotification' z polem 'log: string'.
-  2. Rozbuduj funkcję getNotificationText tak, aby zwracała odpowiedni tekst dla każdego typu powiadomienia.
-  3. Zabezpiecz funkcję getNotificationText przed niewłaściwym typem powiadomienia, zwracając "Unknown notification"
-*/
+const enum NotificationType {
+  EMAIL = 'email',
+  SMS = 'sms',
+  SYSTEM = 'system',
+}
 
 type EmailNotification = {
-  type: 'email';
+  type: NotificationType.EMAIL;
   emailAddress: string;
   content: string;
 };
 
 type SMSNotification = {
-  type: 'sms';
+  type: NotificationType.SMS;
   phoneNumber: number;
   message: string;
 };
 
-type SystemNotification = { type: '' };
+type SystemNotification = {
+  type: NotificationType.SYSTEM;
+  log: string;
+};
 
 type Notification = EmailNotification | SMSNotification | SystemNotification;
 
-// ❌ Ta funkcja wymaga poprawy:
 export function getNotificationText(notification: Notification): string {
-  if (notification.type === 'email') {
-    return notification.content;
+  switch (notification.type) {
+    case NotificationType.EMAIL:
+      return notification.content;
+    case NotificationType.SMS:
+      return notification.message;
+    case NotificationType.SYSTEM:
+      return notification.log;
+    default:
+      return 'Unknown notification';
   }
-
-  return ' ';
 }
