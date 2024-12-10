@@ -13,6 +13,15 @@ export type Event =
   | { type: 'resize'; width: number; height: number };
 
 export function handleEvent(event: Event) {
+  function makeSound(animal: Animal) {
+    switch (animal) {
+      case 'dog':
+        return 'Woof!';
+      case 'cat':
+        return 'Meow!';
+    }
+  }
+  makeSound('bird');
   switch (event.type) {
     case 'click':
       console.log(`Kliknięto w punkcie (${event.x}, ${event.y})`);
@@ -28,6 +37,8 @@ export function handleEvent(event: Event) {
       throw new Error(`Nieobsługiwane zdarzenie: ${JSON.stringify(_exhaustiveCheck)}`);
   }
 }
+
+type Animal = 'dog' | 'cat' | 'bird';
 
 const resizeEvent: Event = { type: 'resize', width: 1024, height: 768 };
 handleEvent(resizeEvent);
