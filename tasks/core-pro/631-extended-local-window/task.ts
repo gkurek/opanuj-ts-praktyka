@@ -7,3 +7,9 @@ window.storage = {
 };
 
 console.log(`Temporary value: ${window.storage.temporaryValue}`);
+
+declare const window: {
+  storage: {
+    temporaryValue: string;
+  };
+};
