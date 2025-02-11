@@ -1,9 +1,13 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
-// Przeciążenia funkcji
+// Function overloads
 export function usePersistedState<T>(key: string, initial: T): [T, Dispatch<SetStateAction<T>>];
+export function usePersistedState<T>(
+  key: string,
+): [T | undefined, Dispatch<SetStateAction<T | undefined>>];
 
-export function usePersistedState<T>(key: string, initial: T): [T, Dispatch<SetStateAction<T>>] {
+// Implementation
+export function usePersistedState<T>(key: string, initial?: T) {
   const getInitialValue = (): T | undefined => {
     const storedValue = localStorage.getItem(key);
     if (storedValue !== null) {
@@ -22,7 +26,7 @@ export function usePersistedState<T>(key: string, initial: T): [T, Dispatch<SetS
   useEffect(() => {
     const newValue = getInitialValue();
     setState(newValue);
-  }, [key]);
+  }, [key, initial]);
 
   useEffect(() => {
     if (state !== undefined && state !== '') {
