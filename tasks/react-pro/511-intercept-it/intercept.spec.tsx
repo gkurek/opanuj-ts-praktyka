@@ -18,8 +18,13 @@ describe('Axios Interceptor', () => {
     render(<App />);
     const searchButton = screen.getByTestId('search-button-new');
     await userEvent.click(searchButton);
+    
+    // Add a small wait to ensure the request is made
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(100);
+    });
 
-    expect(verifyRequest('https://dummyjson.com/products/search', 'GET')).toBe(true);
+    expect(verifyRequest('https://dummyjson.com/products/search?q=phone&limit=5&delay=0', 'GET')).toBe(true);
     expect(verifyRequest('http://localhost:3000/api/tracker', 'POST')).toBe(false);
   });
 
@@ -31,7 +36,7 @@ describe('Axios Interceptor', () => {
       await vi.advanceTimersByTimeAsync(5000);
     });
 
-    expect(verifyRequest('https://dummyjson.com/products/search', 'GET')).toBe(true);
+    expect(verifyRequest('https://dummyjson.com/products/search?q=phone&limit=5&delay=5000', 'GET')).toBe(true);
     expect(verifyRequest('http://localhost:3000/api/tracker', 'POST')).toBe(true);
   });
 });
