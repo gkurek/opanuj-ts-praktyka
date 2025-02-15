@@ -1,12 +1,16 @@
 import { AlertCircle, ChevronLeft, ChevronRight, Loader, Rocket } from 'lucide-react';
 import { StarshipCard } from './StarshipCard';
 import { useState } from 'react';
+import { useGetStarships } from './generated/swapi-client';
+import type { GetStarships200ResultsItem } from './generated/swapi-client.schemas';
 
 export default function Starships() {
   const [page, setPage] = useState(1);
-  const [data] = useState(null);
-  const [isLoading] = useState(false);
-  const [isError] = useState(false);
+  
+  const { data, isLoading, isError } = useGetStarships(
+    { page },
+    { query: { staleTime: 5000 } }
+  );
 
   if (isLoading) {
     return (
@@ -28,9 +32,9 @@ export default function Starships() {
     );
   }
 
-  const starships = data?.data.results || [];
-  const hasNextPage = !!data?.data.next;
-  const hasPrevPage = !!data?.data.previous;
+  const starships = data?.data?.results || [];
+  const hasNextPage = !!data?.data?.next;
+  const hasPrevPage = !!data?.data?.previous;
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 p-8">
@@ -40,7 +44,7 @@ export default function Starships() {
       </h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {starships.map((ship) => (
+        {starships.map((ship: GetStarships200ResultsItem) => (
           <StarshipCard key={ship.url} ship={ship} />
         ))}
       </div>
