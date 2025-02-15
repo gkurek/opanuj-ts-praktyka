@@ -47,7 +47,13 @@ export default function App() {
         ) : (
           <div data-testid="detailed-grid">
             <PlanetsGrid as="main" columns={2}>
-              {(planet) => <DetailedCard planet={planet} />}
+              {(planet) => (
+                <DetailedCard planet={planet}>
+                  {(planet) => (
+                    <p>{planet.terrain}</p>
+                  )}
+                </DetailedCard>
+              )}
             </PlanetsGrid>
           </div>
         )}

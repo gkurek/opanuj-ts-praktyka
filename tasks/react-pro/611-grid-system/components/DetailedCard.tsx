@@ -3,9 +3,10 @@ import { Globe2, Mountain, CircleDot, Timer, Users } from 'lucide-react';
 
 interface DetailedCardProps {
   planet: Planet;
+  children: (planet: Planet) => React.ReactNode;
 }
 
-export default function DetailedCard({ planet }: DetailedCardProps) {
+export default function DetailedCard({ planet, children }: DetailedCardProps) {
   return (
     <div className="h-full p-6 bg-gray-800 rounded-lg border border-gray-700 shadow-lg hover:border-blue-500 transition-colors duration-200">
       <div className="flex items-center gap-2 mb-4">
@@ -42,6 +43,7 @@ export default function DetailedCard({ planet }: DetailedCardProps) {
           <span className="font-medium">{planet.population}</span>
         </p>
       </div>
+      {children(planet)}
     </div>
   );
 }
