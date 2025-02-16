@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { SurveyContext } from './context';
 import { SurveyProps } from './types';
-
+import { ShortAnswer } from './ShortAnswer';
+import { LongAnswer } from './LongAnswer';
+import { Choice } from './Choice';
+import { Submit } from './Submit';
+  
 const Survey = ({ children, onSubmit }: SurveyProps) => {
   const [values, setValues] = useState<Record<string, any>>({});
 
@@ -21,5 +25,10 @@ const Survey = ({ children, onSubmit }: SurveyProps) => {
     </SurveyContext.Provider>
   );
 };
+
+Survey.ShortAnswer = ShortAnswer;
+Survey.LongAnswer = LongAnswer;
+Survey.Choice = Choice;
+Survey.Submit = Submit;
 
 export default Survey;
