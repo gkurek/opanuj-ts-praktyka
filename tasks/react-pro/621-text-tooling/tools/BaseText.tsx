@@ -1,9 +1,7 @@
-import { ReactNode } from 'react';
-
 export interface TextProps {
-  text: string | ReactNode;
+  text: string;
 }
 
 export function BaseText({ text }: TextProps) {
-  return <span>{text}</span>;
+  return <span data-testid={text ? text.toLowerCase().replace(/\s+/g, '-') : 'text'}>{text}</span>;
 }
