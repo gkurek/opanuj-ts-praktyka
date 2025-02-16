@@ -55,7 +55,7 @@ describe('Cart Form with Zod', () => {
     const submitButton = await screen.findByTestId(PAGE_SELECTORS.SUBMIT_BUTTON);
     await userEvent.click(submitButton);
 
-    expect(screen.getByText('Łączna cena nie zgadza się z wartością produktów')).not.toBeInTheDocument();
+    expect(screen.queryByText('Łączna cena nie zgadza się z wartością produktów')).not.toBeInTheDocument();
     expect(screen.getByText('Koszyk został wysłany!')).toBeInTheDocument();
   });
 });

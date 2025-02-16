@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { CartSchema, Cart } from './Cart';
 
 export default function App() {
 
@@ -15,6 +17,7 @@ export default function App() {
     handleSubmit,
     watch,
     setValue,
+    setError,
     formState: { errors }
   } = useForm<Cart>({
     resolver: zodResolver(CartSchema),
@@ -31,7 +34,7 @@ export default function App() {
 
   const items = watch("items");
   const calculatedTotal = items.reduce(
-    (sum, item) => sum + (item.price || 0) * (item.quantity || 0) * 2,
+    (sum, item) => sum + (item.price || 0) * (item.quantity || 0),
     0
   );
 
@@ -43,7 +46,16 @@ export default function App() {
     append({ id: getItemId(), name: "", price: 0, quantity: 0 });
   }
 
-  const onSubmit = () => {
+  const onSubmit = (data: Cart) => {
+    // Validate total against calculated total
+    if (data.total !== calculatedTotal) {
+      setError("total", { 
+        type: "manual", 
+        message: "Łączna cena nie zgadza się z wartością produktów" 
+      });
+      setValue("total", calculatedTotal);
+      return;
+    }
     setIsSubmitted(true);
   };
 
@@ -114,18 +126,15 @@ export default function App() {
           <div>
             <label className="block text-sm font-medium mb-1">Total</label>
             <input
-              {...register("total")}
+              {...register("total", { valueAsNumber: true })}
               type="number"
               step="0.01"
               readOnly
-              value={calculatedTotal.toFixed(2)}
+              value={calculatedTotal}
               className="w-full font-bold text-xlrounded bg-gray-700 cursor-not-allowed"
             />
             {errors.total && (
               <p className="text-red-400 text-sm" data-testid="total-error">{errors.total.message}</p>
-            )}
-            {errors.sum && (
-              <p className="text-red-400 text-sm" data-testid="total-error">{errors.sum.message}</p>
             )}
           </div>
         </div>
